@@ -22,13 +22,3 @@ services:
         --advertise-routes=192.168.0.0/24
         --advertise-exit-node
       TZ: Europe/Amsterdam
-
-  socks5:
-    image: serjs/go-socks5-proxy:latest
-    restart: unless-stopped
-    network_mode: host
-    environment:
-      REQUIRE_AUTH: false
-      PROXY_USER: username
-      PROXY_PASSWORD: password
-      PROXY_PORT: 1080
