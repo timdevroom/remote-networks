@@ -1,12 +1,13 @@
 services:
 
-  ts-lenovo:
+  ts-dell:
     image: tailscale/tailscale:latest
-    hostname: ts-lenovo
+    hostname: ts-dell
     restart: unless-stopped
     network_mode: bridge
     ports:
       - "127.0.0.1:1080:1080/tcp"
+      - "127.0.0.1:8080:8080/tcp"
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -24,11 +25,25 @@ services:
   ts-socks5:
     image: serjs/go-socks5-proxy:latest
     restart: unless-stopped
-    network_mode: "service:ts-lenovo"
+    network_mode: "service:ts-dell"
     depends_on:
-      - ts-lenovo
+      - ts-dell
     environment:
       REQUIRE_AUTH: false
       PROXY_USER: username
       PROXY_PASSWORD: password
       PROXY_PORT: 1080
+
+  squid:
+    image: ubuntu/squid:latest
+    restart: unless-stopped
+    network_mode: "service:ts-dell"
+    volumes:
+      - ./squid/squid.conf:/etc/squid/squid.conf
+      - squid-log:/var/log/squid
+      - squid-spool:/var/spool/squid
+    stop_grace_period: 1s
+
+volumes:
+  squid-log:
+  squid-spool:
