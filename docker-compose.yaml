@@ -12,7 +12,7 @@ services:
       - NET_ADMIN
       - SYS_MODULE
     volumes:
-      - ./tailscale:/var/lib/tailscale
+      - tailscale-data:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY}
@@ -47,3 +47,4 @@ services:
 volumes:
   squid-log:
   squid-spool:
+  tailscale-data:
