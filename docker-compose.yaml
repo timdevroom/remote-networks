@@ -1,8 +1,8 @@
 services:
 
-  ts-dell:
+  ts-hp:
     image: tailscale/tailscale:latest
-    hostname: ts-dell
+    hostname: ts-hp
     restart: unless-stopped
     network_mode: bridge
     ports:
@@ -25,9 +25,9 @@ services:
   ts-socks5:
     image: serjs/go-socks5-proxy:latest
     restart: unless-stopped
-    network_mode: "service:ts-dell"
+    network_mode: "service:ts-hp"
     depends_on:
-      - ts-dell
+      - ts-hp
     environment:
       REQUIRE_AUTH: false
       PROXY_USER: username
@@ -37,7 +37,7 @@ services:
   squid:
     image: ubuntu/squid:latest
     restart: unless-stopped
-    network_mode: "service:ts-dell"
+    network_mode: "service:ts-hp"
     volumes:
       - ./squid/squid.conf:/etc/squid/squid.conf
       - squid-log:/var/log/squid
